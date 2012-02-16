@@ -63,8 +63,7 @@ class OpenVPN extends ClearOS_Controller
         // Load views
         //-----------
 
-        // $views = array('openvpn/server', 'openvpn/settings');
-        $views = array('openvpn/settings');
+        $views = array('openvpn/server', 'openvpn/settings');
 
         $this->page->view_forms($views, lang('openvpn_app_name'));
     }

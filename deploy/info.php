@@ -40,7 +40,6 @@ $app['requires'] = array(
 
 $app['core_requires'] = array(
     'app-network-core',
-    'app-keys-extension-core',
     'openvpn >= 2.1.4',
 );
 
@@ -51,4 +50,5 @@ $app['core_directory_manifest'] = array(
 
 $app['core_file_manifest'] = array(
     'openvpn.php'=> array('target' => '/var/clearos/base/daemon/openvpn.php'),
+    'clients.conf'=> array('target' => '/etc/openvpn/clients.conf'),
 );

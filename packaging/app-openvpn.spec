@@ -1,15 +1,14 @@
 
 Name: app-openvpn
-Group: ClearOS/Apps
+Epoch: 1
 Version: 5.9.9.1
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
-Packager: ClearFoundation
-Vendor: ClearFoundation
+Group: ClearOS/Apps
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
-Requires: %{name}-core = %{version}-%{release}
+Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
 Requires: app-accounts
 Requires: app-groups
@@ -21,11 +20,10 @@ OpenVPN long description...
 
 %package core
 Summary: OpenVPN - APIs and install
-Group: ClearOS/Libraries
 License: LGPLv3
+Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-network-core
-Requires: app-keys-extension-core
 Requires: openvpn >= 2.1.4
 
 %description core
@@ -43,6 +41,7 @@ cp -r * %{buildroot}/usr/clearos/apps/openvpn/
 
 install -d -m 0755 %{buildroot}/var/clearos/openvpn
 install -d -m 0755 %{buildroot}/var/clearos/openvpn/backup
+install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
 install -D -m 0644 packaging/openvpn.php %{buildroot}/var/clearos/base/daemon/openvpn.php
 
 %post
@@ -88,4 +87,5 @@ exit 0
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
+/etc/openvpn/clients.conf
 /var/clearos/base/daemon/openvpn.php
