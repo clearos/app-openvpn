@@ -1,15 +1,15 @@
 <?php
 
 /**
- * PPTPd daemon controller.
+ * OpenVPN daemon controller.
  *
  * @category   Apps
- * @package    PPTPd
+ * @package    OpenVPN
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,21 +47,21 @@ require clearos_app_base('base') . '/controllers/daemon.php';
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * PPTPd daemon controller.
+ * OpenVPN daemon controller.
  *
  * @category   Apps
- * @package    PPTPd
+ * @package    OpenVPN
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
 
 class Server extends Daemon
 {
     function __construct()
     {
-        parent::__construct('pptpd', 'pptpd');
+        parent::__construct('openvpn', 'openvpn');
     }
 }

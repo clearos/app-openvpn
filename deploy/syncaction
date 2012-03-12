@@ -1,13 +1,14 @@
+#!/usr/clearos/sandbox/usr/bin/php
 <?php
 
 /**
- * OpenVPN server view.
+ * Auto configures OpenVPN with sane defaults.
  *
- * @category   ClearOS
+ * @category   Apps
  * @package    OpenVPN
- * @subpackage Views
+ * @subpackage Scripts
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
@@ -25,62 +26,35 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.  
-//  
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Load dependencies
+// B O O T S T R A P
 ///////////////////////////////////////////////////////////////////////////////
 
-$this->lang->load('base');
-$this->lang->load('network');
-$this->lang->load('openvpn');
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
 
 ///////////////////////////////////////////////////////////////////////////////
-// Form handler
+// T R A N S L A T I O N S
 ///////////////////////////////////////////////////////////////////////////////
 
-if ($auto_configure) {
-    $read_only = TRUE;
-    $buttons = array();
-} else if ($form_type === 'edit') {
-    $read_only = FALSE;
-    $buttons = array(
-        form_submit_update('submit'),
-        anchor_cancel('/app/openvpn/settings'),
-    );
-} else {
-    $read_only = TRUE;
-    $buttons = array(
-        anchor_edit('/app/openvpn/settings/edit')
-    );
-}
+clearos_load_language('openvpn');
 
 ///////////////////////////////////////////////////////////////////////////////
-// Auto configure help
+// D E P E N D E N C I E S
 ///////////////////////////////////////////////////////////////////////////////
 
-if ($auto_configure) {
-    echo infobox_highlight(
-        lang('base_automatic_configuration_enabled'),
-        lang('openvpn_auto_configure_help') . '<br>' .
-        "<p align='center'>" . anchor_custom('/app/openvpn/settings/disable_auto_configure', lang('base_disable_auto_configuration')) . "</p>"
-    );
-}
+use \clearos\apps\openvpn\OpenVPN as OpenVPN;
+
+clearos_load_library('openvpn/OpenVPN');
 
 ///////////////////////////////////////////////////////////////////////////////
-// Form
+// M A I N
 ///////////////////////////////////////////////////////////////////////////////
 
-echo form_open('openvpn/settings/edit');
-echo form_header(lang('base_settings'));
-
-echo field_input('domain', $domain, lang('network_internet_domain'), $read_only);
-echo field_input('dns_server', $dns_server, lang('network_dns_server'), $read_only);
-echo field_input('wins_server', $wins_server, lang('network_wins_server'), $read_only);
-
-echo field_button_set($buttons);
-
-echo form_footer();
-echo form_close();
+$openvpn = new OpenVPN();
+$openvpn->auto_configure();
+$openvpn->reset();

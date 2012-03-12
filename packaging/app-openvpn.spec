@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 5.9.9.1
+Version: 1.0.7
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -16,18 +16,21 @@ Requires: app-users
 Requires: app-network
 
 %description
-OpenVPN long description...
+The OpenVPN app provides secure remote access to this system and your local network.
 
 %package core
 Summary: OpenVPN - APIs and install
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
-Requires: app-network-core
+Requires: app-certificate-manager-core
+Requires: app-network-core >= 1:1.0.7
+Requires: app-openvpn-plugin-core
+Requires: csplugin-filewatch
 Requires: openvpn >= 2.1.4
 
 %description core
-OpenVPN long description...
+The OpenVPN app provides secure remote access to this system and your local network.
 
 This package provides the core API and libraries.
 
@@ -39,9 +42,13 @@ This package provides the core API and libraries.
 mkdir -p -m 755 %{buildroot}/usr/clearos/apps/openvpn
 cp -r * %{buildroot}/usr/clearos/apps/openvpn/
 
+install -d -m 0755 %{buildroot}/etc/openvpn/ssl
 install -d -m 0755 %{buildroot}/var/clearos/openvpn
 install -d -m 0755 %{buildroot}/var/clearos/openvpn/backup
+install -d -m 0755 %{buildroot}/var/lib/openvpn
 install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
+install -D -m 0644 packaging/filewatch-openvpn-network.conf %{buildroot}/etc/clearsync.d/filewatch-openvpn-network.conf
+install -D -m 0644 packaging/openvpn.conf %{buildroot}/etc/clearos/openvpn.conf
 install -D -m 0644 packaging/openvpn.php %{buildroot}/var/clearos/base/daemon/openvpn.php
 
 %post
@@ -82,10 +89,14 @@ exit 0
 %exclude /usr/clearos/apps/openvpn/packaging
 %exclude /usr/clearos/apps/openvpn/tests
 %dir /usr/clearos/apps/openvpn
+%dir /etc/openvpn/ssl
 %dir /var/clearos/openvpn
 %dir /var/clearos/openvpn/backup
+%dir /var/lib/openvpn
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
 /etc/openvpn/clients.conf
+/etc/clearsync.d/filewatch-openvpn-network.conf
+%config(noreplace) /etc/clearos/openvpn.conf
 /var/clearos/base/daemon/openvpn.php

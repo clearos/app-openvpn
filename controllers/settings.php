@@ -55,20 +55,74 @@ class Settings extends ClearOS_Controller
 
     function index()
     {
+        $this->_common('view');
+    }
+
+    /**
+     * Edit view.
+     *
+     * @return view
+     */
+
+    function edit()
+    {
+        $this->_common('edit');
+    }
+
+    /**
+     * Disables auto configuration.
+     *
+     * @return redirect
+     */
+
+    function disable_auto_configure()
+    {
         // Load dependencies
         //------------------
 
         $this->load->library('openvpn/OpenVPN');
+
+        // Disable and redirect
+        //---------------------
+
+        $this->openvpn->set_auto_configure_state(FALSE);
+        redirect('/openvpn/settings/edit');
+    }
+
+    /**
+     * View view.
+     *
+     * @return view
+     */
+
+    function view()
+    {
+        $this->_common('view');
+    }
+
+    /**
+     * Common view/edit handler.
+     *
+     * @param string $form_type form type
+     *
+     * @return view
+     */
+
+    function _common($form_type)
+    {
+        // Load dependencies
+        //------------------
+
+        $this->lang->load('base');
         $this->lang->load('openvpn');
+        $this->load->library('openvpn/OpenVPN');
 
         // Set validation rules
         //---------------------
          
-        $this->form_validation->set_policy('remote_ip', 'pptpd/PPTPd', 'validate_ip_range');
-        $this->form_validation->set_policy('local_ip', 'pptpd/PPTPd', 'validate_ip_range');
-        $this->form_validation->set_policy('domain', 'pptpd/PPTPd', 'validate_domain');
-        $this->form_validation->set_policy('wins', 'pptpd/PPTPd', 'validate_wins_server');
-        $this->form_validation->set_policy('dns', 'pptpd/PPTPd', 'validate_dns_server');
+        $this->form_validation->set_policy('domain', 'openvpn/OpenVPN', 'validate_domain');
+        $this->form_validation->set_policy('wins_server', 'openvpn/OpenVPN', 'validate_wins_server');
+        $this->form_validation->set_policy('dns_server', 'openvpn/OpenVPN', 'validate_dns_server');
         $form_ok = $this->form_validation->run();
 
         // Handle form submit
@@ -76,14 +130,13 @@ class Settings extends ClearOS_Controller
 
         if (($this->input->post('submit') && $form_ok)) {
             try {
-                $this->pptpd->set_remote_ip($this->input->post('remote_ip'));
-                $this->pptpd->set_local_ip($this->input->post('local_ip'));
-                $this->pptpd->set_domain($this->input->post('domain'));
-                $this->pptpd->set_wins_server($this->input->post('wins'));
-                $this->pptpd->set_dns_server($this->input->post('dns'));
-                $this->pptpd->reset(TRUE);
+                $this->openvpn->set_domain($this->input->post('domain'));
+                $this->openvpn->set_wins_server($this->input->post('wins_server'));
+                $this->openvpn->set_dns_server($this->input->post('dns_server'));
+                $this->openvpn->reset(TRUE);
 
                 $this->page->set_status_updated();
+                redirect('/openvpn/settings');
             } catch (Exception $e) {
                 $this->page->view_exception($e);
                 return;
@@ -94,13 +147,11 @@ class Settings extends ClearOS_Controller
         //---------------
 
         try {
-/*
-            $data['local_ip'] = $this->pptpd->get_local_ip();
-            $data['remote_ip'] = $this->pptpd->get_remote_ip();
-            $data['domain'] = $this->pptpd->get_domain();
-            $data['wins'] = $this->pptpd->get_wins_server();
-            $data['dns'] = $this->pptpd->get_dns_server();
-*/
+            $data['form_type'] = $form_type;
+            $data['domain'] = $this->openvpn->get_domain();
+            $data['wins_server'] = $this->openvpn->get_wins_server();
+            $data['dns_server'] = $this->openvpn->get_dns_server();
+            $data['auto_configure'] = $this->openvpn->get_auto_configure_state();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
@@ -109,6 +160,6 @@ class Settings extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('settings', $data, lang('pptpd_pptp_server'));
+        $this->page->view_form('settings', $data, lang('base_settings'));
     }
 }

@@ -58,23 +58,33 @@ clearos_load_language('base');
 use \clearos\apps\base\Daemon as Daemon;
 use \clearos\apps\base\File as File;
 use \clearos\apps\network\Hostname as Hostname;
+use \clearos\apps\network\Iface_Manager as Iface_Manager;
 use \clearos\apps\network\Network_Utils as Network_Utils;
+use \clearos\apps\network\Routes as Routes;
 use \clearos\apps\organization\Organization as Organization;
 
 clearos_load_library('base/Daemon');
 clearos_load_library('base/File');
 clearos_load_library('network/Hostname');
+clearos_load_library('network/Iface_Manager');
 clearos_load_library('network/Network_Utils');
+clearos_load_library('network/Routes');
 clearos_load_library('organization/Organization');
 
 // Exceptions
 //-----------
 
+use \Exception as Exception;
 use \clearos\apps\base\Engine_Exception as Engine_Exception;
+use \clearos\apps\base\File_No_Match_Exception as File_No_Match_Exception;
+use \clearos\apps\base\File_Not_Found_Exception as File_Not_Found_Exception;
 use \clearos\apps\base\Validation_Exception as Validation_Exception;
 
 clearos_load_library('base/Engine_Exception');
+clearos_load_library('base/File_No_Match_Exception');
+clearos_load_library('base/File_Not_Found_Exception');
 clearos_load_library('base/Validation_Exception');
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -98,6 +108,7 @@ class OpenVPN extends Daemon
     // C O N S T A N T S
     ///////////////////////////////////////////////////////////////////////////////
 
+    const FILE_APP_CONFIG = '/etc/clearos/openvpn.conf';
     const FILE_CLIENTS_CONFIG = '/etc/openvpn/clients.conf';
     const DEFAULT_PORT = 1194;
     const DEFAULT_PROTOCOL = "udp";
@@ -127,7 +138,100 @@ class OpenVPN extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         parent::__construct('openvpn');
+    }
 
+    /**
+     * Auto configures PPTP.
+     *
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    public function auto_configure()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // Note: this is very similar to the PPTP method.  If you make a bug
+        // fix or enhancement here, check the PPTP Server app as well.
+
+        if (! $this->get_auto_configure_state())
+            return;
+
+        // FIXME: add domain name
+
+        $ifaces = new Iface_Manager();
+        $routes = new Routes();
+
+        // Local / Remote IP configuration
+        //--------------------------------
+
+        $raw_routes = $routes->get_most_trusted_routes();
+        $routes = array();
+
+        foreach ($raw_routes as $route) {
+            list($ip, $prefix) = preg_split('/\//', $route);
+            $routes[] = $ip . ' ' . Network_Utils::get_netmask($prefix);
+        }
+
+        $this->set_push_routes($routes);
+
+        // DNS server configuration
+        //-------------------------
+
+        $ips = $ifaces->get_most_trusted_ips();
+
+        if ((!empty($ips[0])) && clearos_app_installed('dns'))
+            $this->set_dns_server($ips[0]);
+        else
+            $this->set_dns_server('');
+
+        // WINS server configuration
+        //--------------------------
+
+        if (clearos_library_installed('samba/Samba')) {
+            clearos_load_library('samba/Samba');
+            $samba = new \clearos\apps\samba\Samba();
+            $is_wins = $samba->get_wins_support();
+            $wins_server = $samba->get_wins_server();
+        } else {
+            $is_wins = FALSE;
+            $wins_server = '';
+        }
+
+        if ($is_wins && (!empty($ips[0]))) {
+            $this->set_wins_server($ips[0]);
+        } else if (!empty($wins_server)) {
+            $this->set_wins_server($wins_server);
+        } else {
+            $this->set_wins_server('');
+        }
+    }
+
+    /**
+     * Returns auto-configure state.
+     *
+     * @return boolean state of auto-configure mode
+     */
+
+    public function get_auto_configure_state()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        try {
+            $file = new File(self::FILE_APP_CONFIG);
+            $value = $file->lookup_value("/^auto_configure\s*=\s*/i");
+        } catch (File_Not_Found_Exception $e) {
+            return FALSE;
+        } catch (File_No_Match_Exception $e) {
+            return FALSE;
+        } catch (Exception $e) {
+            throw new Engine_Exception($e->get_message());
+        }
+
+        if (preg_match('/yes/i', $value))
+            return TRUE;
+        else
+            return FALSE;
     }
 
     /**
@@ -322,6 +426,31 @@ auth-user-pass
     }
 
     /**
+     * Sets auto-configure state.
+     *
+     * @param boolean $state state
+     *
+     * @return void
+     * @throws Engine_Exception, Validation_Exception
+     */
+
+    public function set_auto_configure_state($state)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $config_value = ($state) ? 'yes' : 'no';
+
+        $file = new File(self::FILE_APP_CONFIG);
+
+        if ($file->exists())
+            $file->delete();
+
+        $file->create('root', 'root', '0644');
+
+        $file->add_lines("auto_configure = $config_value\n");
+    }
+
+    /**
      * Sets DNS server pushed out to clients.
      *
      * @param string $ip DNS server IP
@@ -355,6 +484,26 @@ auth-user-pass
         Validation_Exception::is_valid($this->validate_domain($domain));
 
         $this->_set_dhcp_parameter('DOMAIN', $domain);
+    }
+
+    /**
+     * Sets push routes.
+     *
+     * @param array $routes routes
+     *
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    public function set_push_routes($routes)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $file = new File(self::FILE_CLIENTS_CONFIG);
+        $file->delete_lines("/^push\s+\"route\s+/");
+
+        foreach ($routes as $route)
+            $file->add_lines("push \"route $route\"\n");
     }
 
     /**
@@ -392,7 +541,7 @@ auth-user-pass
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_ip($ip))
-            return lang('openvpn_network_dns_server_invalid');
+            return lang('network_dns_server_invalid');
     }
 
     /**
@@ -407,8 +556,8 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if (! Network_Utils::is_valid_domain($domain))
-            return lang('openvpn_network_domain_invalid');
+        if (! Network_Utils::is_valid_domain($domain, TRUE))
+            return lang('network_internet_domain_invalid');
     }
 
     /**
@@ -424,7 +573,7 @@ auth-user-pass
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_ip($ip))
-            return lang('openvpn_network_wins_server_invalid');
+            return lang('network_wins_server_invalid');
     }
 
     ///////////////////////////////////////////////////////////////////////////////

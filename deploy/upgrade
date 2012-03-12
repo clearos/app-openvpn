@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Grab bootstrap certificates from Certificate Manager
+#-----------------------------------------------------
+
+KEY_SOURCE=/etc/pki/CA/bootstrap.key
+KEY=/etc/openvpn/ssl/server.key
+
+if [ ! -s "$KEY" ]; then
+    logger -p local6.notice -t installer "app-print-server-core - prepping server key"
+    cp $KEY_SOURCE $KEY
+    chown root.root $KEY
+    chmod 600 $KEY
+fi
+
+CRT_SOURCE=/etc/pki/CA/bootstrap.crt
+CRT=/etc/openvpn/ssl/server.crt
+
+if [ ! -s "$CRT" ]; then
+    logger -p local6.notice -t installer "app-print-server-core - prepping server certificate"
+    cp $CRT_SOURCE $CRT
+    chown root.root $CRT
+    chmod 600 $CRT
+fi
+
+if [ ! -e /etc/openvpn/ssl/dh1024.pem ]; then
+    openssl dhparam -out /etc/openvpn/ssl/dh1024.pem 1024 >/dev/null 2>&1
+fi
+
+# Sync action: updates configuration using clearsync hook
+#--------------------------------------------------------
+
+/usr/clearos/apps/openvpn/deploy/syncaction
