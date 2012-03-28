@@ -519,7 +519,8 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        Validation_Exception::is_valid($this->validate_wins_server($ip));
+        if (! empty($ip))
+            Validation_Exception::is_valid($this->validate_wins_server($ip));
 
         $this->_set_dhcp_parameter('WINS', $ip);
     }
