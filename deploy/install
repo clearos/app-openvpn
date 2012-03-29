@@ -3,8 +3,10 @@
 # Set default start/boot
 #-----------------------
 
-logger -p local6.notice -t installer "app-openvpn-core - enabling OpenVPN server"
-chkconfig openvpn on
+if [ -e /etc/pki/CA/ca-cert.pem ]; then
+    logger -p local6.notice -t installer "app-openvpn-core - enabling OpenVPN server"
+    chkconfig openvpn on
 
-logger -p local6.notice -t installer "app-openvpn-core - starting OpenVPN server"
-service openvpn start
+    logger -p local6.notice -t installer "app-openvpn-core - starting OpenVPN server"
+    service openvpn start
+fi
