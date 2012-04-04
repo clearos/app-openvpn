@@ -57,6 +57,7 @@ clearos_load_language('base');
 
 use \clearos\apps\base\Daemon as Daemon;
 use \clearos\apps\base\File as File;
+use \clearos\apps\network\Domain as Domain;
 use \clearos\apps\network\Hostname as Hostname;
 use \clearos\apps\network\Iface_Manager as Iface_Manager;
 use \clearos\apps\network\Network_Utils as Network_Utils;
@@ -65,6 +66,7 @@ use \clearos\apps\organization\Organization as Organization;
 
 clearos_load_library('base/Daemon');
 clearos_load_library('base/File');
+clearos_load_library('network/Domain');
 clearos_load_library('network/Hostname');
 clearos_load_library('network/Iface_Manager');
 clearos_load_library('network/Network_Utils');
@@ -84,7 +86,6 @@ clearos_load_library('base/Engine_Exception');
 clearos_load_library('base/File_No_Match_Exception');
 clearos_load_library('base/File_Not_Found_Exception');
 clearos_load_library('base/Validation_Exception');
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -157,8 +158,6 @@ class OpenVPN extends Daemon
         if (! $this->get_auto_configure_state())
             return;
 
-        // FIXME: add domain name
-
         $ifaces = new Iface_Manager();
         $routes = new Routes();
 
@@ -205,6 +204,14 @@ class OpenVPN extends Daemon
         } else {
             $this->set_wins_server('');
         }
+
+        // Domain
+        //-------
+
+        $domain = new Domain();
+        $default = $domain->get_default();
+
+        $this-set_domain($default);
     }
 
     /**
