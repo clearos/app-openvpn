@@ -62,7 +62,6 @@ use \clearos\apps\network\Hostname as Hostname;
 use \clearos\apps\network\Iface_Manager as Iface_Manager;
 use \clearos\apps\network\Network_Utils as Network_Utils;
 use \clearos\apps\network\Routes as Routes;
-use \clearos\apps\organization\Organization as Organization;
 
 clearos_load_library('base/Daemon');
 clearos_load_library('base/File');
@@ -71,7 +70,6 @@ clearos_load_library('network/Hostname');
 clearos_load_library('network/Iface_Manager');
 clearos_load_library('network/Network_Utils');
 clearos_load_library('network/Routes');
-clearos_load_library('organization/Organization');
 
 // Exceptions
 //-----------
@@ -393,23 +391,9 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // Use the defined Internet hostname (if configured)
-        //--------------------------------------------------
+        $hostname = new Hostname();
 
-        // FIXME
-        if (file_exists(COMMON_CORE_DIR . "/api/Organization.class.php")) {
-            include_once COMMON_CORE_DIR . "/api/Organization.class.php";
-
-            $organization = new Organization();
-            $myhost = $organization->GetInternetHostname();
-        }
-
-        if (empty($myhost)) {
-            $hostname = new Hostname();
-            $myhost = $hostname->get();
-        }
-
-        return $myhost;
+        return $hostname->get_internet_hostname();
     }
 
     /**
