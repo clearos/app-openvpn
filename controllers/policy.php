@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OpenVPN controller.
+ * OpenVPN policy controller
  *
  * @category   Apps
  * @package    OpenVPN
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/app/openvpn/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,51 +30,42 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+require clearos_app_base('groups') . '/controllers/groups.php';
+
+///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * OpenVPN controller.
+ * OpenVPN policy controller
  *
  * @category   Apps
  * @package    OpenVPN
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/app/openvpn/
  */
 
-class OpenVPN extends ClearOS_Controller
+class Policy extends Groups
 {
     /**
-     * OpenVPN server summary view.
-     *
-     * @return view
+     * OpenVPN policy constructor.
      */
 
-    function index()
+    function __construct()
     {
-        // Show Certificate Manager widget if it is not initialized
-        //---------------------------------------------------------
-
-        $this->load->module('certificate_manager/certificate_status');
-
-        if (! $this->certificate_status->is_initialized()) {
-            $this->certificate_status->widget();
-            return;
-        }
-
-        // Load libraries
-        //---------------
-
-        $this->lang->load('openvpn');
-
-        // Load views
-        //-----------
-
-        $views = array('openvpn/server', 'openvpn/settings', 'openvpn/policy');
-
-        $this->page->view_forms($views, lang('openvpn_app_name'));
+        parent::__construct('openvpn', array('openvpn_plugin'));
     }
 }
