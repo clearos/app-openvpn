@@ -14,7 +14,7 @@ fi
 # Initialize domain name with default
 #------------------------------------
 
-/usr/clearos/app/openvpn/deploy/initialize
+/usr/clearos/apps/openvpn/deploy/initialize
 
 # Reload clearsyncd
 #------------------
