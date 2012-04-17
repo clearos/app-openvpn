@@ -209,7 +209,7 @@ class OpenVPN extends Daemon
         $domain = new Domain();
         $default = $domain->get_default();
 
-        $this-set_domain($default);
+        $this->set_domain($default);
     }
 
     /**
