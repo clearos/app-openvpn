@@ -59,6 +59,7 @@ $app['core_directory_manifest'] = array(
 $app['core_file_manifest'] = array(
     'openvpn.php'=> array('target' => '/var/clearos/base/daemon/openvpn.php'),
     'clients.conf'=> array('target' => '/etc/openvpn/clients.conf'),
+    'clients-tcp.conf'=> array('target' => '/etc/openvpn/clients-tcp.conf'),
     'filewatch-openvpn-network.conf'=> array('target' => '/etc/clearsync.d/filewatch-openvpn-network.conf'),
     'openvpn.conf'=> array(
         'target' => '/etc/clearos/openvpn.conf',

@@ -47,6 +47,7 @@ install -d -m 0755 %{buildroot}/etc/openvpn/ssl
 install -d -m 0755 %{buildroot}/var/clearos/openvpn
 install -d -m 0755 %{buildroot}/var/clearos/openvpn/backup
 install -d -m 0755 %{buildroot}/var/lib/openvpn
+install -D -m 0644 packaging/clients-tcp.conf %{buildroot}/etc/openvpn/clients-tcp.conf
 install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
 install -D -m 0644 packaging/filewatch-openvpn-network.conf %{buildroot}/etc/clearsync.d/filewatch-openvpn-network.conf
 install -D -m 0644 packaging/openvpn.conf %{buildroot}/etc/clearos/openvpn.conf
@@ -97,6 +98,7 @@ exit 0
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
+/etc/openvpn/clients-tcp.conf
 /etc/openvpn/clients.conf
 /etc/clearsync.d/filewatch-openvpn-network.conf
 %config(noreplace) /etc/clearos/openvpn.conf

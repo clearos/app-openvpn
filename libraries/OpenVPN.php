@@ -109,6 +109,7 @@ class OpenVPN extends Daemon
 
     const FILE_APP_CONFIG = '/etc/clearos/openvpn.conf';
     const FILE_CLIENTS_CONFIG = '/etc/openvpn/clients.conf';
+    const FILE_CLIENTS_CONFIG_TCP = '/etc/openvpn/clients-tcp.conf';
     const DEFAULT_PORT = 1194;
     const DEFAULT_PROTOCOL = "udp";
     const CONSTANT_PROTOCOL_UDP = "udp";
@@ -490,11 +491,15 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $file = new File(self::FILE_CLIENTS_CONFIG);
-        $file->delete_lines("/^push\s+\"route\s+/");
+        $configs = array(self::FILE_CLIENTS_CONFIG, self::FILE_CLIENTS_CONFIG_TCP);
 
-        foreach ($routes as $route)
-            $file->add_lines("push \"route $route\"\n");
+        foreach ($configs as $config) {
+            $file = new File($config);
+            $file->delete_lines("/^push\s+\"route\s+/");
+
+            foreach ($routes as $route)
+                $file->add_lines("push \"route $route\"\n");
+        }
     }
 
     /**
@@ -624,10 +629,14 @@ auth-user-pass
 
         $this->is_loaded = FALSE;
 
-        $file = new File(self::FILE_CLIENTS_CONFIG);
-        $match = $file->replace_lines("/^push\s+\"dhcp-option\s+$key\s+/", "push \"dhcp-option $key $value\"\n");
+        $configs = array(self::FILE_CLIENTS_CONFIG, self::FILE_CLIENTS_CONFIG_TCP);
 
-        if (!$match)
-            $file->add_lines("push \"dhcp-option $key $value\"\n");
+        foreach ($configs as $config) {
+            $file = new File($config);
+            $match = $file->replace_lines("/^push\s+\"dhcp-option\s+$key\s+/", "push \"dhcp-option $key $value\"\n");
+
+            if (!$match)
+                $file->add_lines("push \"dhcp-option $key $value\"\n");
+        }
     }
 }
