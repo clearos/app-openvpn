@@ -254,9 +254,9 @@ class OpenVPN extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $host = $this->GetServerHostname();
-        $port = $this->GetClientPort();
-        $protocol = $this->GetClientProtocol();
+        $host = $this->get_server_hostname();
+        $port = $this->get_client_port();
+        $protocol = $this->get_client_protocol();
 
         if ($type == self::TYPE_OS_WINDOWS) {
             $config = "client
@@ -339,6 +339,24 @@ auth-user-pass
             return self::DEFAULT_PROTOCOL;
         else
             return $this->config['proto'];
+    }
+
+    /**
+     * Returns client types.
+     *
+     * @return array client types
+     * @throws Engine_Exception
+     */
+
+    public function get_client_types()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        return array(
+            self::TYPE_OS_WINDOWS => lang('openvpn_windows'),
+            self::TYPE_OS_LINUX => lang('openvpn_linux'),
+            self::TYPE_OS_MACOS => lang('openvpn_mac')
+        );
     }
 
     /**
