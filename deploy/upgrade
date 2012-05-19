@@ -1,30 +1,23 @@
 #!/bin/sh
 
-# Grab bootstrap certificates from Certificate Manager
-#-----------------------------------------------------
-
-KEY_SOURCE=/etc/pki/CA/bootstrap.key
-KEY=/etc/openvpn/ssl/server.key
-
-if [ ! -s "$KEY" ]; then
-    logger -p local6.notice -t installer "app-print-server-core - prepping server key"
-    cp $KEY_SOURCE $KEY
-    chown root.root $KEY
-    chmod 600 $KEY
-fi
-
-CRT_SOURCE=/etc/pki/CA/bootstrap.crt
-CRT=/etc/openvpn/ssl/server.crt
-
-if [ ! -s "$CRT" ]; then
-    logger -p local6.notice -t installer "app-print-server-core - prepping server certificate"
-    cp $CRT_SOURCE $CRT
-    chown root.root $CRT
-    chmod 600 $CRT
-fi
+# Create dh1024.pem if one does not exist
+#----------------------------------------
 
 if [ ! -e /etc/openvpn/ssl/dh1024.pem ]; then
     openssl dhparam -out /etc/openvpn/ssl/dh1024.pem 1024 >/dev/null 2>&1
+fi
+
+# Cleanup
+#--------
+
+CHECK=`grep "^cert /etc/openvpn/ssl/server.crt" /etc/openvpn/clients.conf 2>/dev/null`
+if [ -n "$CHECK" ]; then
+    sed -i -e 's/^cert \/etc\/openvpn\/ssl\/server.crt.*/cert \/etc\/pki\/CA\/sys-0-cert.pem/' /etc/openvpn/clients.conf
+fi
+
+CHECK=`grep "^key /etc/openvpn/ssl/server.key" /etc/openvpn/clients.conf 2>/dev/null`
+if [ -n "$CHECK" ]; then
+    sed -i -e 's/^key \/etc\/openvpn\/ssl\/server.key/key \/etc\/pki\/CA\/private\/sys-0-key.pem/' /etc/openvpn/clients.conf
 fi
 
 # Sync action: updates configuration using clearsync hook

@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.1.0
+Version: 1.1.2
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -98,8 +98,8 @@ exit 0
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
-/etc/openvpn/clients-tcp.conf
-/etc/openvpn/clients.conf
+%config(noreplace) /etc/openvpn/clients-tcp.conf
+%config(noreplace) /etc/openvpn/clients.conf
 /etc/clearsync.d/filewatch-openvpn-network.conf
 %config(noreplace) /etc/clearos/openvpn.conf
 /var/clearos/base/daemon/openvpn.php
