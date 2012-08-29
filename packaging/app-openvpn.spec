@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.1.2
+Version: 1.2.5
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -15,6 +15,7 @@ Requires: app-certificate-manager
 Requires: app-groups
 Requires: app-users
 Requires: app-network
+Requires: app-user-certificates
 
 %description
 The OpenVPN app provides secure remote access to this system and your local network.

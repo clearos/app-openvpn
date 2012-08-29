@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '1.1.2';
+$app['version'] = '1.2.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -39,6 +39,7 @@ $app['requires'] = array(
     'app-groups',
     'app-users',
     'app-network',
+    'app-user-certificates',
 );
 
 $app['core_requires'] = array(
