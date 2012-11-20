@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '1.2.5';
+$app['version'] = '1.3.1';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -51,6 +51,7 @@ $app['core_requires'] = array(
 );
 
 $app['core_directory_manifest'] = array(
+    '/etc/clearos/openvpn.d' => array(),
     '/etc/openvpn/ssl' => array(),
     '/var/clearos/openvpn' => array(),
     '/var/clearos/openvpn/backup' => array(),
@@ -72,6 +73,14 @@ $app['core_file_manifest'] = array(
     ),
     'openvpn.conf'=> array(
         'target' => '/etc/clearos/openvpn.conf',
+        'config' => TRUE,
+        'config_params' => 'noreplace',
+    ),
+    'authorize' => array(
+        'target' => '/etc/clearos/openvpn.d/authorize',
+        'mode' => '0644',
+        'owner' => 'root',
+        'group' => 'root',
         'config' => TRUE,
         'config_params' => 'noreplace',
     ),

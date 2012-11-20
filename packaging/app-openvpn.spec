@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.2.5
+Version: 1.3.1
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -44,10 +44,12 @@ This package provides the core API and libraries.
 mkdir -p -m 755 %{buildroot}/usr/clearos/apps/openvpn
 cp -r * %{buildroot}/usr/clearos/apps/openvpn/
 
+install -d -m 0755 %{buildroot}/etc/clearos/openvpn.d
 install -d -m 0755 %{buildroot}/etc/openvpn/ssl
 install -d -m 0755 %{buildroot}/var/clearos/openvpn
 install -d -m 0755 %{buildroot}/var/clearos/openvpn/backup
 install -d -m 0755 %{buildroot}/var/lib/openvpn
+install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/openvpn.d/authorize
 install -D -m 0644 packaging/clients-tcp.conf %{buildroot}/etc/openvpn/clients-tcp.conf
 install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
 install -D -m 0644 packaging/filewatch-openvpn-network.conf %{buildroot}/etc/clearsync.d/filewatch-openvpn-network.conf
@@ -92,6 +94,7 @@ exit 0
 %exclude /usr/clearos/apps/openvpn/packaging
 %exclude /usr/clearos/apps/openvpn/tests
 %dir /usr/clearos/apps/openvpn
+%dir /etc/clearos/openvpn.d
 %dir /etc/openvpn/ssl
 %dir /var/clearos/openvpn
 %dir /var/clearos/openvpn/backup
@@ -99,6 +102,7 @@ exit 0
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
+%config(noreplace) /etc/clearos/openvpn.d/authorize
 %config(noreplace) /etc/openvpn/clients-tcp.conf
 %config(noreplace) /etc/openvpn/clients.conf
 /etc/clearsync.d/filewatch-openvpn-network.conf
