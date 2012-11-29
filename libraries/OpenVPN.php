@@ -186,9 +186,9 @@ class OpenVPN extends Daemon
         // WINS server configuration
         //--------------------------
 
-        if (clearos_library_installed('samba/Samba')) {
-            clearos_load_library('samba/Samba');
-            $samba = new \clearos\apps\samba\Samba();
+        if (clearos_library_installed('samba_common/Samba')) {
+            clearos_load_library('samba_common/Samba');
+            $samba = new \clearos\apps\samba_common\Samba();
             $is_wins = $samba->get_wins_support();
             $wins_server = $samba->get_wins_server();
         } else {
@@ -651,10 +651,14 @@ auth-user-pass
 
         foreach ($configs as $config) {
             $file = new File($config);
-            $match = $file->replace_lines("/^push\s+\"dhcp-option\s+$key\s+/", "push \"dhcp-option $key $value\"\n");
+            if (empty($value)) {
+                $file->delete_lines("/^push\s+\"dhcp-option\s+$key\s+/");
+            } else {
+                $match = $file->replace_lines("/^push\s+\"dhcp-option\s+$key\s+/", "push \"dhcp-option $key $value\"\n");
 
-            if (!$match)
-                $file->add_lines("push \"dhcp-option $key $value\"\n");
+                if (!$match)
+                    $file->add_lines("push \"dhcp-option $key $value\"\n");
+            }
         }
     }
 }
