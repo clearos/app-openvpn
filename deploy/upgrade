@@ -68,6 +68,17 @@ for CONFIG in $CONFIGS; do
     fi
 done
 
+# Update ifconfig-pool-persist parameter (tracker #822)
+#------------------------------------------------------
+
+for CONFIG in $CONFIGS; do
+    CHECK=`grep "^ifconfig-pool-persist.*ipp.txt$" $CONFIG`
+    if [ -n "$CHECK" ] ; then
+        logger -p local6.notice -t installer "app-openvpn-core - updating ifconfig-pool-persist time: $CONFIG"
+        sed -i -e 's/^ifconfig-pool-persist.*/ifconfig-pool-persist \/var\/lib\/openvpn\/ipp.txt 120/' $CONFIG
+    fi
+done
+
 # Sync action: updates configuration using clearsync hook
 #--------------------------------------------------------
 
