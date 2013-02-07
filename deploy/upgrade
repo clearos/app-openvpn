@@ -32,22 +32,18 @@ if [ -n "$CHECK" ]; then
     sed -i -e 's/^key \/etc\/openvpn\/ssl\/server.key/key \/etc\/pki\/CA\/private\/sys-0-key.pem/' /etc/openvpn/clients.conf
 fi
 
-# Test upgrade
-#-------------
+# PAM check
+#----------
 
 CONFIGS="/etc/openvpn/clients.conf /etc/openvpn/clients-tcp.conf"
 
-CHECK=`grep ommunity /etc/clearos-release 2>/dev/null`
-
-if [ -n "$CHECK" ]; then
-    for CONFIG in $CONFIGS; do
-        CHECK=`grep "^plugin[[:space:]].*openvpn-auth-pam.so" $CONFIG`
-        if [ -z "$CHECK" ]; then
-            logger -p local6.notice -t installer "app-openvpn-core - adding plugin path"
-            echo "plugin /usr/lib/openvpn/plugin/lib/openvpn-auth-pam.so openvpn" >> $CONFIG
-        fi
-    done
-fi
+for CONFIG in $CONFIGS; do
+    CHECK=`grep "^plugin[[:space:]].*openvpn-auth-pam.so" $CONFIG`
+    if [ -z "$CHECK" ]; then
+        logger -p local6.notice -t installer "app-openvpn-core - adding plugin path"
+        echo "plugin /usr/lib/openvpn/plugin/lib/openvpn-auth-pam.so openvpn" >> $CONFIG
+    fi
+done
 
 # Check arch for annoying lib64 path name in config file
 #-------------------------------------------------------
