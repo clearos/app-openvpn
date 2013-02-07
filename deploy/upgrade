@@ -75,6 +75,13 @@ for CONFIG in $CONFIGS; do
     fi
 done
 
+CHECK=`grep "^ifconfig-pool-persist /var/lib/openvpn/ipp.txt" /etc/openvpn/clients-tcp.conf 2>/dev/null`
+if [ -n "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-openvpn-core - updating ifconfig-pool-persist filename for TCP"
+    sed -i -e 's/^ifconfig-pool-persist \/var\/lib\/openvpn\/ipp.txt/ifconfig-pool-persist \/var\/lib\/openvpn\/ipp-tcp.txt/' /etc/openvpn/clients-tcp.conf
+    /sbins/service openvpn restart
+fi
+
 # Sync action: updates configuration using clearsync hook
 #--------------------------------------------------------
 
