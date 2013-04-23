@@ -11,6 +11,19 @@ if [ -e /etc/pki/CA/sys-0-cert.pem ]; then
     service openvpn start
 fi
 
+# PAM check
+#----------
+
+CONFIGS="/etc/openvpn/clients.conf /etc/openvpn/clients-tcp.conf"
+
+for CONFIG in $CONFIGS; do
+    CHECK=`grep "^plugin[[:space:]].*openvpn-auth-pam.so" $CONFIG`
+    if [ -z "$CHECK" ]; then
+        logger -p local6.notice -t installer "app-openvpn-core - adding plugin path"
+        echo "plugin /usr/lib/openvpn/plugin/lib/openvpn-auth-pam.so openvpn" >> $CONFIG
+    fi
+done
+
 # Initialize domain name with default
 #------------------------------------
 
