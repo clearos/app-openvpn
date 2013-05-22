@@ -3,9 +3,9 @@
 /**
  * OpenVPN settings controller.
  *
- * @category   Apps
- * @package    OpenVPN
- * @subpackage Controllers
+ * @category   apps
+ * @package    openvpn
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -36,9 +36,9 @@
 /**
  * OpenVPN settings controller.
  *
- * @category   Apps
- * @package    OpenVPN
- * @subpackage Controllers
+ * @category   apps
+ * @package    openvpn
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
