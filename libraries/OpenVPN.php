@@ -355,7 +355,7 @@ auth-user-pass
         return array(
             self::TYPE_OS_WINDOWS => lang('openvpn_windows'),
             self::TYPE_OS_LINUX => lang('openvpn_linux'),
-            self::TYPE_OS_MACOS => lang('openvpn_mac')
+            self::TYPE_OS_MACOS => lang('openvpn_mac_os')
         );
     }
 
