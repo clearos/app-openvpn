@@ -28,8 +28,3 @@ done
 #------------------------------------
 
 /usr/clearos/apps/openvpn/deploy/initialize
-
-# Reload clearsyncd
-#------------------
-
-/sbin/service clearsyncd condrestart >/dev/null 2>&1
