@@ -76,6 +76,7 @@ if ($auto_configure) {
 echo form_open('openvpn/settings/edit');
 echo form_header(lang('base_settings'));
 
+echo field_input('hostname', $hostname, lang('network_internet_hostname'), TRUE);
 echo field_input('domain', $domain, lang('network_internet_domain'), $read_only);
 echo field_input('dns_server', $dns_server, lang('network_dns_server'), $read_only);
 echo field_input('wins_server', $wins_server, lang('network_wins_server'), $read_only);

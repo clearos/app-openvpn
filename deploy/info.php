@@ -5,13 +5,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '1.5.0';
+$app['version'] = '1.5.2';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
 $app['license'] = 'GPLv3';
 $app['license_core'] = 'LGPLv3';
 $app['description'] = lang('openvpn_app_description');
+$app['tooltip'] = lang('openvpn_internet_hostname_tooltip');
 
 /////////////////////////////////////////////////////////////////////////////
 // App name and categories

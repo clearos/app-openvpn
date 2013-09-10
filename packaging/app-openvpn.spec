@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.5.0
+Version: 1.5.2
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3

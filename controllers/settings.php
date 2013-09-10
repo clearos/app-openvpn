@@ -149,6 +149,7 @@ class Settings extends ClearOS_Controller
         try {
             $data['form_type'] = $form_type;
             $data['domain'] = $this->openvpn->get_domain();
+            $data['hostname'] = $this->openvpn->get_server_hostname();
             $data['wins_server'] = $this->openvpn->get_wins_server();
             $data['dns_server'] = $this->openvpn->get_dns_server();
             $data['auto_configure'] = $this->openvpn->get_auto_configure_state();
