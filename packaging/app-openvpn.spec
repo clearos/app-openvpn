@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.5.5
+Version: 1.5.15
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -92,7 +92,6 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/openvpn/packaging
-%exclude /usr/clearos/apps/openvpn/tests
 %dir /usr/clearos/apps/openvpn
 %dir /etc/clearos/openvpn.d
 %dir /etc/openvpn/ssl
