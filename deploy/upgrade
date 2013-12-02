@@ -1,5 +1,6 @@
 #!/bin/sh
 
+CONFIGS="/etc/openvpn/clients.conf /etc/openvpn/clients-tcp.conf"
 TIMESTAMP=`date "+%b-%d-%Y-%T"`
 
 # Create dh1024.pem if one does not exist
