@@ -533,8 +533,7 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if (! empty($ip))
-            Validation_Exception::is_valid($this->validate_wins_server($ip));
+        Validation_Exception::is_valid($this->validate_wins_server($ip));
 
         $this->_set_dhcp_parameter('WINS', $ip);
     }
@@ -555,7 +554,7 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if (! Network_Utils::is_valid_ip($ip))
+        if ($ip && !Network_Utils::is_valid_ip($ip))
             return lang('network_dns_server_invalid');
     }
 
@@ -587,7 +586,7 @@ auth-user-pass
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if (! Network_Utils::is_valid_ip($ip))
+        if ($ip && !Network_Utils::is_valid_ip($ip))
             return lang('network_wins_server_invalid');
     }
 
