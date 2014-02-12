@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OpenVPN controller.
+ * OpenVPN server network check controller.
  *
  * @category   apps
  * @package    openvpn
  * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2014 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,51 +30,42 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+require clearos_app_base('network') . '/controllers/network_check.php';
+
+///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * OpenVPN controller.
+ * OpenVPN server network check controller.
  *
  * @category   apps
  * @package    openvpn
  * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2014 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/pptpd/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
 
-class OpenVPN extends ClearOS_Controller
+class Network extends Network_Check
 {
     /**
-     * OpenVPN server summary view.
-     *
-     * @return view
+     * Network check constructor.
      */
 
-    function index()
+    function __construct()
     {
-        // Show Certificate Manager widget if it is not initialized
-        //---------------------------------------------------------
-
-        $this->load->module('certificate_manager/certificate_status');
-
-        if (! $this->certificate_status->is_initialized()) {
-            $this->certificate_status->widget();
-            return;
-        }
-
-        // Load libraries
-        //---------------
-
-        $this->lang->load('openvpn');
-
-        // Load views
-        //-----------
-
-        $views = array('openvpn/server', 'openvpn/network', 'openvpn/settings', 'openvpn/policy');
-
-        $this->page->view_forms($views, lang('openvpn_app_name'));
+        parent::__construct('openvpn', 'UDP', 1194);
     }
 }
