@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 1.5.15
+Version: 1.6.0
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -26,9 +26,9 @@ License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-certificate-manager-core
-Requires: app-network-core >= 1:1.0.7
+Requires: app-events-core
+Requires: app-network-core >= 1:1.6.0
 Requires: app-openvpn-plugin-core
-Requires: csplugin-filewatch
 Requires: openvpn >= 2.1.4
 
 %description core
@@ -52,7 +52,7 @@ install -d -m 0755 %{buildroot}/var/lib/openvpn
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/openvpn.d/authorize
 install -D -m 0644 packaging/clients-tcp.conf %{buildroot}/etc/openvpn/clients-tcp.conf
 install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
-install -D -m 0644 packaging/filewatch-openvpn-network.conf %{buildroot}/etc/clearsync.d/filewatch-openvpn-network.conf
+install -D -m 0755 packaging/network-configuration-event %{buildroot}/var/clearos/events/network_configuration/openvpn
 install -D -m 0644 packaging/openvpn.conf %{buildroot}/etc/clearos/openvpn.conf
 install -D -m 0644 packaging/openvpn.php %{buildroot}/var/clearos/base/daemon/openvpn.php
 
@@ -104,6 +104,6 @@ exit 0
 %config(noreplace) /etc/clearos/openvpn.d/authorize
 %config(noreplace) /etc/openvpn/clients-tcp.conf
 %config(noreplace) /etc/openvpn/clients.conf
-/etc/clearsync.d/filewatch-openvpn-network.conf
+/var/clearos/events/network_configuration/openvpn
 %config(noreplace) /etc/clearos/openvpn.conf
 /var/clearos/base/daemon/openvpn.php

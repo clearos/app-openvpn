@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '1.5.15';
+$app['version'] = '1.6.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -45,9 +45,9 @@ $app['requires'] = array(
 
 $app['core_requires'] = array(
     'app-certificate-manager-core',
-    'app-network-core >= 1:1.0.7',
+    'app-events-core',
+    'app-network-core >= 1:1.6.0',
     'app-openvpn-plugin-core',
-    'csplugin-filewatch',
     'openvpn >= 2.1.4',
 );
 
@@ -61,7 +61,6 @@ $app['core_directory_manifest'] = array(
 
 $app['core_file_manifest'] = array(
     'openvpn.php'=> array('target' => '/var/clearos/base/daemon/openvpn.php'),
-    'filewatch-openvpn-network.conf'=> array('target' => '/etc/clearsync.d/filewatch-openvpn-network.conf'),
     'clients.conf'=> array(
         'target' => '/etc/openvpn/clients.conf',
         'config' => TRUE,
@@ -84,5 +83,9 @@ $app['core_file_manifest'] = array(
         'group' => 'root',
         'config' => TRUE,
         'config_params' => 'noreplace',
+    ),
+    'network-configuration-event'=> array(
+        'target' => '/var/clearos/events/network_configuration/openvpn',
+        'mode' => '0755'
     ),
 );
