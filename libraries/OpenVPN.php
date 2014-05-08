@@ -112,6 +112,7 @@ class OpenVPN extends Daemon
     const FILE_CLIENTS_CONFIG_TCP = '/etc/openvpn/clients-tcp.conf';
     const DEFAULT_PORT = 1194;
     const DEFAULT_PROTOCOL = "udp";
+    const DEFAULT_DNS = '8.8.8.8';
     const CONSTANT_PROTOCOL_UDP = "udp";
     const CONSTANT_PROTOCOL_TCP = "tcp";
     const TYPE_OS_WINDOWS = "Windows";
@@ -181,7 +182,7 @@ class OpenVPN extends Daemon
         if ((!empty($ips[0])) && clearos_app_installed('dns'))
             $this->set_dns_server($ips[0]);
         else
-            $this->set_dns_server('');
+            $this->set_dns_server(self::DEFAULT_DNS);
 
         // WINS server configuration
         //--------------------------
