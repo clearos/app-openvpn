@@ -88,6 +88,10 @@ $app['core_file_manifest'] = array(
         'target' => '/var/clearos/events/network_configuration/openvpn',
         'mode' => '0755'
     ),
+    'network-peerdns-event'=> array(
+        'target' => '/var/clearos/events/network_peerdns/openvpn',
+        'mode' => '0755'
+    ),
     'samba-configuration-event'=> array(
         'target' => '/var/clearos/events/samba_configuration/openvpn',
         'mode' => '0755'
