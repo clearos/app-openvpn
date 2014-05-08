@@ -212,6 +212,8 @@ class OpenVPN extends Daemon
         $default = $domain->get_default();
 
         $this->set_domain($default);
+
+        $this->reset(TRUE);
     }
 
     /**

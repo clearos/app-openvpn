@@ -57,4 +57,3 @@ clearos_load_library('openvpn/OpenVPN');
 
 $openvpn = new OpenVPN();
 $openvpn->auto_configure();
-$openvpn->reset();
