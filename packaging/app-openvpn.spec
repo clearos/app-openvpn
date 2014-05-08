@@ -55,6 +55,7 @@ install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
 install -D -m 0755 packaging/network-configuration-event %{buildroot}/var/clearos/events/network_configuration/openvpn
 install -D -m 0644 packaging/openvpn.conf %{buildroot}/etc/clearos/openvpn.conf
 install -D -m 0644 packaging/openvpn.php %{buildroot}/var/clearos/base/daemon/openvpn.php
+install -D -m 0755 packaging/samba-configuration-event %{buildroot}/var/clearos/events/samba_configuration/openvpn
 
 %post
 logger -p local6.notice -t installer 'app-openvpn - installing'
@@ -107,3 +108,4 @@ exit 0
 /var/clearos/events/network_configuration/openvpn
 %config(noreplace) /etc/clearos/openvpn.conf
 /var/clearos/base/daemon/openvpn.php
+/var/clearos/events/samba_configuration/openvpn
