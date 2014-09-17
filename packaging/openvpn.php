@@ -19,9 +19,12 @@ clearos_load_language('openvpn');
 // pid_file - openvpn utilizes multiple pid files
 
 $configlet = array(
-	'title' => lang('openvpn_app_name'),
-	'package' => 'openvpn',
-	'process_name' => 'openvpn',
-	'reloadable' => FALSE,
-	'url' => '/app/openvpn'
+    'title' => lang('openvpn_app_name'),
+    'package' => 'openvpn',
+    'process_name' => 'openvpn',
+    'multiservice' => TRUE,
+    'api_class' => 'OpenVPN',
+    'api_namespace' => 'openvpn',
+    'reloadable' => FALSE,
+    'url' => '/app/openvpn'
 );

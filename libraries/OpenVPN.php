@@ -57,6 +57,7 @@ clearos_load_language('base');
 
 use \clearos\apps\base\Daemon as Daemon;
 use \clearos\apps\base\File as File;
+use \clearos\apps\base\Folder as Folder;
 use \clearos\apps\network\Domain as Domain;
 use \clearos\apps\network\Hostname as Hostname;
 use \clearos\apps\network\Iface_Manager as Iface_Manager;
@@ -65,6 +66,7 @@ use \clearos\apps\network\Routes as Routes;
 
 clearos_load_library('base/Daemon');
 clearos_load_library('base/File');
+clearos_load_library('base/Folder');
 clearos_load_library('network/Domain');
 clearos_load_library('network/Hostname');
 clearos_load_library('network/Iface_Manager');
@@ -110,6 +112,7 @@ class OpenVPN extends Daemon
     const FILE_APP_CONFIG = '/etc/clearos/openvpn.conf';
     const FILE_CLIENTS_CONFIG = '/etc/openvpn/clients.conf';
     const FILE_CLIENTS_CONFIG_TCP = '/etc/openvpn/clients-tcp.conf';
+    const PATH_CONFIG = '/etc/openvpn';
     const DEFAULT_PORT = 1194;
     const DEFAULT_PROTOCOL = "udp";
     const DEFAULT_DNS = '8.8.8.8';
@@ -416,6 +419,31 @@ auth-user-pass
         $hostname = new Hostname();
 
         return $hostname->get_internet_hostname();
+    }
+
+    /**
+     * Returns list of systemd services.
+     *
+     * @return array list of systemd services
+     * @throws Engine_Exception
+     */
+
+    public function get_systemd_services()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $folder = new Folder(self::PATH_CONFIG);
+
+        $files = $folder->get_listing();
+        $services = array();
+
+        foreach ($files as $file) {
+            $matches = array();
+            if (preg_match('/(.*)\.conf$/', $file, $matches))
+                $services[] = 'openvpn@' . $matches[1] . '.service';
+        }
+
+        return $services;
     }
 
     /**

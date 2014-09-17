@@ -5,10 +5,10 @@
 
 if [ -e /etc/pki/CA/sys-0-cert.pem ]; then
     logger -p local6.notice -t installer "app-openvpn-core - enabling OpenVPN server"
-    chkconfig openvpn on
+    chkconfig openvpn on >/dev/null 2>&1
 
     logger -p local6.notice -t installer "app-openvpn-core - starting OpenVPN server"
-    service openvpn start
+    service openvpn start >/dev/null 2>&1
 fi
 
 # PAM check
@@ -19,8 +19,9 @@ CONFIGS="/etc/openvpn/clients.conf /etc/openvpn/clients-tcp.conf"
 for CONFIG in $CONFIGS; do
     CHECK=`grep "^plugin[[:space:]].*openvpn-auth-pam.so" $CONFIG`
     if [ -z "$CHECK" ]; then
+        # note: upgrade script will handle lib vs lib64 path
         logger -p local6.notice -t installer "app-openvpn-core - adding plugin path"
-        echo "plugin /usr/lib/openvpn/plugin/lib/openvpn-auth-pam.so openvpn" >> $CONFIG
+        echo "plugin /usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so openvpn" >> $CONFIG
     fi
 done
 
