@@ -29,7 +29,7 @@ Requires: app-certificate-manager-core
 Requires: app-events-core
 Requires: app-network-core >= 1:1.6.0
 Requires: app-openvpn-plugin-core
-Requires: openvpn >= 2.1.4
+Requires: openvpn >= 2.3.2
 
 %description core
 The OpenVPN app provides secure remote access to this system and your local network.
