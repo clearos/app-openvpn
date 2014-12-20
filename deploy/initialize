@@ -60,5 +60,7 @@ clearos_load_library('network/Domain');
 $domain = new Domain();
 $default = $domain->get_default();
 
-$openvpn = new OpenVPN();
-$openvpn->set_domain($default);
+if (! empty($default)) {
+    $openvpn = new OpenVPN();
+    $openvpn->set_domain($default);
+}
