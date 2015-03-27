@@ -1,16 +1,5 @@
 #!/bin/sh
 
-# Set default start/boot
-#-----------------------
-
-if [ -e /etc/pki/CA/sys-0-cert.pem ]; then
-    logger -p local6.notice -t installer "app-openvpn-core - enabling OpenVPN server"
-    chkconfig openvpn on >/dev/null 2>&1
-
-    logger -p local6.notice -t installer "app-openvpn-core - starting OpenVPN server"
-    service openvpn start >/dev/null 2>&1
-fi
-
 # PAM check
 #----------
 
@@ -29,3 +18,14 @@ done
 #------------------------------------
 
 /usr/clearos/apps/openvpn/deploy/initialize
+
+# Set default start/boot
+#-----------------------
+
+if [ -e /etc/pki/CA/sys-0-cert.pem ]; then
+    logger -p local6.notice -t installer "app-openvpn-core - enabling OpenVPN server"
+    chkconfig openvpn on >/dev/null 2>&1
+
+    logger -p local6.notice -t installer "app-openvpn-core - starting OpenVPN server"
+    service openvpn start >/dev/null 2>&1
+fi
