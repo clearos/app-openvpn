@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# OpenVPN RPM does not uninstall properly
+service openvpn stop >/dev/null 2>&1
