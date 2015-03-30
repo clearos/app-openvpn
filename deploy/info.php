@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '2.0.18';
+$app['version'] = '2.0.21';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -96,4 +96,10 @@ $app['core_file_manifest'] = array(
         'target' => '/var/clearos/events/samba_configuration/openvpn',
         'mode' => '0755'
     ),
+);
+
+$app['delete_dependency'] = array(
+    'app-openvpn-core',
+    'app-openvpn-plugin-core',
+    'openvpn',
 );
