@@ -62,10 +62,11 @@ if ($auto_configure) {
 ///////////////////////////////////////////////////////////////////////////////
 
 if ($auto_configure) {
+    $options['buttons'] = array(anchor_custom('/app/openvpn/settings/disable_auto_configure', lang('base_disable_auto_configuration')));
     echo infobox_highlight(
         lang('base_automatic_configuration_enabled'),
-        lang('openvpn_auto_configure_help') . '<br>' .
-        "<p align='center'>" . anchor_custom('/app/openvpn/settings/disable_auto_configure', lang('base_disable_auto_configuration')) . "</p>"
+        lang('openvpn_auto_configure_help'),
+        $options
     );
 }
 
