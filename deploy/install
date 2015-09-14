@@ -6,7 +6,7 @@
 CONFIGS="/etc/openvpn/clients.conf /etc/openvpn/clients-tcp.conf"
 
 for CONFIG in $CONFIGS; do
-    CHECK=`grep "^plugin[[:space:]].*openvpn-auth-pam.so" $CONFIG`
+    CHECK=`grep "^plugin[[:space:]].*openvpn-plugin-auth-pam.so" $CONFIG`
     if [ -z "$CHECK" ]; then
         # note: upgrade script will handle lib vs lib64 path
         logger -p local6.notice -t installer "app-openvpn-core - adding plugin path"
