@@ -29,7 +29,7 @@ Requires: app-certificate-manager-core
 Requires: app-events-core
 Requires: app-network-core >= 1:1.6.0
 Requires: app-openvpn-plugin-core
-Requires: openvpn >= 2.3.2
+Requires: openvpn >= 2.4.2
 
 %description core
 The OpenVPN app provides secure remote access to this system and your local network.
@@ -48,7 +48,6 @@ install -d -m 0755 %{buildroot}/etc/clearos/openvpn.d
 install -d -m 0755 %{buildroot}/etc/openvpn/ssl
 install -d -m 0755 %{buildroot}/var/clearos/openvpn
 install -d -m 0755 %{buildroot}/var/clearos/openvpn/backup
-install -d -m 0755 %{buildroot}/var/lib/openvpn
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/openvpn.d/authorize
 install -D -m 0644 packaging/clients-tcp.conf %{buildroot}/etc/openvpn/clients-tcp.conf
 install -D -m 0644 packaging/clients.conf %{buildroot}/etc/openvpn/clients.conf
@@ -94,12 +93,12 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/openvpn/packaging
+%exclude /usr/clearos/apps/openvpn/unify.json
 %dir /usr/clearos/apps/openvpn
 %dir /etc/clearos/openvpn.d
 %dir /etc/openvpn/ssl
 %dir /var/clearos/openvpn
 %dir /var/clearos/openvpn/backup
-%dir /var/lib/openvpn
 /usr/clearos/apps/openvpn/deploy
 /usr/clearos/apps/openvpn/language
 /usr/clearos/apps/openvpn/libraries
