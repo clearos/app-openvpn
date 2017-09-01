@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'openvpn';
-$app['version'] = '2.3.0';
+$app['version'] = '2.4.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -46,7 +46,7 @@ $app['requires'] = array(
 $app['core_requires'] = array(
     'app-certificate-manager-core',
     'app-events-core',
-    'app-network-core >= 1:1.6.0',
+    'app-network-core >= 1:2.4.2',
     'app-openvpn-plugin-core',
     'openvpn >= 2.4.2',
 );

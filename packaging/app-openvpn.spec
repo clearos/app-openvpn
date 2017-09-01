@@ -1,7 +1,7 @@
 
 Name: app-openvpn
 Epoch: 1
-Version: 2.3.0
+Version: 2.4.0
 Release: 1%{dist}
 Summary: OpenVPN
 License: GPLv3
@@ -27,7 +27,7 @@ Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-certificate-manager-core
 Requires: app-events-core
-Requires: app-network-core >= 1:1.6.0
+Requires: app-network-core >= 1:2.4.2
 Requires: app-openvpn-plugin-core
 Requires: openvpn >= 2.4.2
 

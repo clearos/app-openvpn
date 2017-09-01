@@ -7,7 +7,7 @@
  * @package    openvpn
  * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2014 ClearFoundation
+ * @copyright  2014-2017 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
@@ -53,7 +53,7 @@ require clearos_app_base('network') . '/controllers/network_check.php';
  * @package    openvpn
  * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2014 ClearFoundation
+ * @copyright  2014-2017 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/openvpn/
  */
@@ -66,6 +66,11 @@ class Network extends Network_Check
 
     function __construct()
     {
-        parent::__construct('openvpn', 'UDP', 1194);
+        $rules = [
+            [ 'name' => 'OpenVPN', 'protocol' => 'UDP', 'port' => 1194 ],
+            [ 'name' => 'OpenVPN - TCP', 'protocol' => 'TCP', 'port' => 1194 ],
+        ];
+
+        parent::__construct('openvpn', $rules);
     }
 }
